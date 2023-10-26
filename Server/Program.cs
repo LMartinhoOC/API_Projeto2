@@ -37,7 +37,7 @@ builder.Services.AddEndpointsApiExplorer();
 //builder.Services.AddSwaggerGen();
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("V1", new OpenApiInfo { Title = "JWTAuthAuthentication2", Version = "V1" });
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "JWTAuthAuthentication2", Version = "V1" });
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
     {
         Name = "Authorization",
