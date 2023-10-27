@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Reflection;
 
 namespace Server.Controllers
 {
@@ -32,7 +33,7 @@ namespace Server.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "admin")]
+        [Authorize]
         [Route("numero")]
         public ActionResult PostNumero([FromBody] PostNumeroModel model)
         {
@@ -48,7 +49,7 @@ namespace Server.Controllers
         }
 
         [HttpPut]
-        [Authorize(Roles = "admin")]
+        [Authorize]
         [Route("numero")]
         public ActionResult PutNumero([FromBody] PutNumeroModel model)
         {
@@ -70,21 +71,17 @@ namespace Server.Controllers
         }
 
         [HttpDelete]
-        [Authorize(Roles = "admin")]
+        [Authorize]
         [Route("numero")]
-        public ActionResult DeleteNumero([FromBody] DeleteNumeroModel model)
+        public ActionResult DeleteNumero(int numero)
         {
-            if(!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            else if(!Numeros.Contains(model.Numero))
+            if(!Numeros.Contains(numero))
             {
                 return BadRequest("Numero não encontrado na lista!");
             }
             else
             {
-                Numeros.Remove(model.Numero);
+                Numeros.Remove(numero);
                 return Ok(Numeros);
             }
         }

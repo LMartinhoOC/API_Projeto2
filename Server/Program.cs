@@ -11,8 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 
 //Configuração JWT
-var key = Encoding.ASCII.GetBytes(builder.Configuration["Key:JwtKey"].ToString()); 
-
+var key = Encoding.ASCII.GetBytes(builder.Configuration["Key:JwtKey"].ToString());
 
 builder.Services.AddAuthentication(x =>
 {
@@ -23,11 +22,9 @@ builder.Services.AddAuthentication(x =>
     x.TokenValidationParameters = new TokenValidationParameters
     {
         ValidateIssuerSigningKey = true,
-        IssuerSigningKey =         new SymmetricSecurityKey(key),
-        ValidateAudience =         true,            
-        ValidateIssuer =           true,
-        ValidAudience =            "https://localhost:7050",
-        ValidIssuer =              "Admin",
+        ValidateAudience = false,
+        IssuerSigningKey = new SymmetricSecurityKey(key),
+        ValidateIssuer = false,
     };
 });
 
@@ -37,7 +34,7 @@ builder.Services.AddEndpointsApiExplorer();
 //builder.Services.AddSwaggerGen();
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "JWTAuthAuthentication2", Version = "V1" });
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "JWTAuthAuthentication2", Version = "v1" });
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
     {
         Name = "Authorization",
@@ -45,20 +42,20 @@ builder.Services.AddSwaggerGen(c =>
         Scheme = "Bearer",
         BearerFormat = "JWT",
         In = ParameterLocation.Header,
-        Description = "Autorização JWT usando o esquema de Bearer",
+        Description = "JWT Authorization header using the Bearer scheme",
     });
     c.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
-        { 
-            new OpenApiSecurityScheme
-            {
-                Reference = new OpenApiReference
+        {
+                new OpenApiSecurityScheme
                 {
-                    Type = ReferenceType.SecurityScheme,
-                    Id = "Bearer"
-                }
-            },
-            new string[] { }
+                    Reference = new OpenApiReference
+                    {
+                        Type = ReferenceType.SecurityScheme,
+                        Id = "Bearer"
+                    }
+                },
+                new string[] {}
         }
     });
 });
@@ -78,6 +75,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseAuthorization();
+//app.UseAuthorization();
 app.MapControllers();
 app.Run();
